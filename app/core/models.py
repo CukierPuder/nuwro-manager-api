@@ -37,3 +37,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
     USERNAME_FIELD = 'email'
+
+
+class Experiment(models.Model):
+    """Experiment to be used for a ResultFile"""
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
