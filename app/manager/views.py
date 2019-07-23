@@ -2,7 +2,7 @@ from rest_framework import viewsets, mixins
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from core.models import Experiment, Measurement
+from core.models import Experiment, Measurement, Nuwroversion
 from manager import serializers
 
 
@@ -26,6 +26,20 @@ class MeasurementViewSet(viewsets.GenericViewSet,
     """Manage measurements in database"""
     queryset = Measurement.objects.all()
     serializer_class = serializers.MeasurementSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        """Return the list of all objects ordered by name"""
+        return self.queryset.order_by('-name')
+
+
+class NuwroversionViewSet(viewsets.GenericViewSet,
+                          mixins.ListModelMixin,
+                          mixins.CreateModelMixin):
+    """Manage nuwroversions in database"""
+    queryset = Nuwroversion.objects.all()
+    serializer_class = serializers.NuwroversionSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 

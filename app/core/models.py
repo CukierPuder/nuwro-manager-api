@@ -53,3 +53,11 @@ class Measurement(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Nuwroversion(models.Model):
+    """Nuwroversion to be used for a ResultFile"""
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name

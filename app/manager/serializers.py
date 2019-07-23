@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from core.models import Experiment, Measurement
+from core.models import Experiment, Measurement, Nuwroversion
 
 
 class ExperimentSerializer(serializers.ModelSerializer):
@@ -17,5 +17,14 @@ class MeasurementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Measurement
+        fields = ('id', 'name')
+        read_only_fields = ('id',)
+
+
+class NuwroversionSerializer(serializers.ModelSerializer):
+    """Serializer for Nuwroversion objects"""
+
+    class Meta:
+        model = Nuwroversion
         fields = ('id', 'name')
         read_only_fields = ('id',)

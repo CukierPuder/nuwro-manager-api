@@ -57,3 +57,10 @@ class ModelTests(TestCase):
             name='CC0pi'
         )
         self.assertEqual(str(measurement), measurement.name)
+
+    def test_nuwroversion_str(self):
+        """Test the nuwroversion string representation"""
+        nuwroversion = models.Nuwroversion.objects.create(
+            name='v1.0'
+        )
+        self.assertEqual(str(nuwroversion), nuwroversion.name)
