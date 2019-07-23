@@ -13,13 +13,13 @@ EXPERIMENTS_URL = reverse('manager:experiment-list')
 
 
 class PublicExperimentApiTests(TestCase):
-    """Test the publicly available xperiments API"""
+    """Test the publicly available experiments API"""
 
     def setUp(self):
         self.client = APIClient()
 
     def test_login_required(self):
-        """Test that login is required for retrieving tags"""
+        """Test that login is required for retrieving experiments"""
         res = self.client.get(EXPERIMENTS_URL)
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -48,13 +48,13 @@ class PrivateExperimentApiTests(TestCase):
         self.assertEqual(res.data, serializer.data)
 
     def test_create_experiment_successful(self):
-        """Test creating a new tag"""
+        """Test creating a new experiment"""
         payload = {'name': 'MINERvA'}
         self.client.post(EXPERIMENTS_URL, payload)
         exists = Experiment.objects.filter(name=payload['name']).exists()
         self.assertTrue(exists)
 
-    def test_create_experiment_invalid(self):
+    def test_create_invalid_experiment(self):
         """Test creating a new experiment with invalid payload"""
         payload = {'name': ''}
         res = self.client.post(EXPERIMENTS_URL, payload)

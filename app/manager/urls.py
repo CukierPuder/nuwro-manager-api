@@ -6,6 +6,7 @@ from manager import views
 
 router = DefaultRouter()
 router.register('experiments', views.ExperimentViewSet)
+router.register('measurements', views.MeasurementViewSet)
 
 app_name = 'manager'
 

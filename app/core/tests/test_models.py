@@ -47,6 +47,13 @@ class ModelTests(TestCase):
     def test_experiment_str(self):
         """Test the experiment string representation"""
         experiment = models.Experiment.objects.create(
-            name='Test experiment'
+            name='MINERvA'
         )
         self.assertEqual(str(experiment), experiment.name)
+
+    def test_measurement_str(self):
+        """Test the measurement string representation"""
+        measurement = models.Measurement.objects.create(
+            name='CC0pi'
+        )
+        self.assertEqual(str(measurement), measurement.name)

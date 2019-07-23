@@ -40,7 +40,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Experiment(models.Model):
-    """Experiment to be used for a ResultFile"""
+    """Experiment to be used for a ResultFile and DataFile"""
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
+class Measurement(models.Model):
+    """Measurement to be used for a ResultFile and DataFile"""
     name = models.CharField(max_length=255)
 
     def __str__(self):
