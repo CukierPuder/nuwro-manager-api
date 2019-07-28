@@ -1,5 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.core.files import File
+from unittest.mock import MagicMock
 
 from core import models
 
@@ -64,3 +66,24 @@ class ModelTests(TestCase):
             name='v1.0'
         )
         self.assertEqual(str(nuwroversion), nuwroversion.name)
+
+    def test_datafile_str(self):
+        """Test the DataFile string representation"""
+        experiment = models.Experiment.objects.create(name='MINERvA')
+        measurement = models.Measurement.objects.create(name='CC0pi')
+        file_mock = MagicMock(spec=File)
+        file_mock.name = 'test.txt'
+
+        datafile = models.Datafile.objects.create(
+            experiment=experiment,
+            measurement=measurement,
+            variable='some variable',
+            x_axis='X AXIS',
+            y_axis='Y AXIS',
+            input_file=file_mock
+        )
+
+        exists = models.Datafile.objects.filter(
+            input_file=datafile.input_file
+        ).exists()
+        self.assertTrue(exists)

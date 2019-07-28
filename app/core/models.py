@@ -1,9 +1,21 @@
+import os
+
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
     PermissionsMixin
 )
+
+
+def datafile_file_path(instance, filename):
+    """Generate filepath for new Datafile file"""
+    return os.path.join(
+        (f'uploads/datafiles/'
+         f'{instance.experiment.name}'
+         f'/{instance.measurement.name}/'),
+        filename
+    )
 
 
 class UserManager(BaseUserManager):
@@ -61,3 +73,20 @@ class Nuwroversion(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Datafile(models.Model):
+    """Represents the nuwro input (data) file"""
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
+    measurement = models.ForeignKey(Measurement, on_delete=models.CASCADE)
+    variable = models.CharField(max_length=255, blank=True)
+    x_axis = models.CharField(max_length=255)
+    y_axis = models.CharField(max_length=255)
+    filename = models.CharField(max_length=255)
+    input_file = models.FileField(
+        unique=True,
+        null=False,
+        upload_to=datafile_file_path
+    )
+    link = models.CharField(max_length=255)
+    creation_date = models.DateTimeField(auto_now_add=True)
