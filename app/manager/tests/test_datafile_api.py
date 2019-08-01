@@ -32,20 +32,20 @@ def detail_url(datafile_id):
     return reverse('manager:datafile-detail', args=[datafile_id])
 
 
-def sample_experiment(name='CC0pi'):
+def sample_experiment(name='MINERvA'):
     """Create and return the sample experiment"""
     return Experiment.objects.create(name=name)
 
 
-def sample_measurement(name='MINERvA'):
+def sample_measurement(name='CC0pi'):
     """Create and return the sample measurement"""
     return Measurement.objects.create(name=name)
 
 
-def sample_datafile():
+def sample_datafile(filename='test.txt'):
     """Create and return sample datafile"""
     file_mock = MagicMock(spec=File)
-    file_mock.name = 'test.txt'
+    file_mock.name = filename
 
     defaults = {
         'experiment': sample_experiment(),
@@ -88,7 +88,7 @@ class PrivateDatafileApiTests(TestCase):
         sample_datafile()
 
         res = self.client.get(DATAFILES_URL)
-        datafiles = Datafile.objects.all().order_by('-id')
+        datafiles = Datafile.objects.all()
         serializer = DatafileSerializer(datafiles, many=True)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)

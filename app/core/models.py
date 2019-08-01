@@ -18,6 +18,17 @@ def datafile_file_path(instance, filename):
     )
 
 
+def resultfile_file_path(instance, filename):
+    """Generate filepath for a new Resultfile file"""
+    return os.path.join(
+        (f'uploads/resultfiles/'
+         f'{instance.experiment.name}'
+         f'/{instance.measurement.name}'
+         f'/{instance.nuwroversion.name}'),
+        filename
+    )
+
+
 class UserManager(BaseUserManager):
 
     def create_user(self, email, password=None, **extra_fields):
@@ -90,3 +101,32 @@ class Datafile(models.Model):
     )
     link = models.CharField(max_length=255)
     creation_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        if self.filename:
+            return self.filename
+        return self.input_file.name.split('/')[-1]
+
+
+class Resultfile(models.Model):
+    """Respresents the nuwro result text file"""
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
+    measurement = models.ForeignKey(Measurement, on_delete=models.CASCADE)
+    nuwroversion = models.ForeignKey(Nuwroversion, on_delete=models.CASCADE)
+    description = models.TextField(blank=True)
+    x_axis = models.CharField(max_length=255)
+    y_axis = models.CharField(max_length=255)
+    filename = models.CharField(max_length=255)
+    result_file = models.FileField(
+        unique=True,
+        null=False,
+        upload_to=resultfile_file_path
+    )
+    related_datafiles = models.ManyToManyField('Datafile')
+    link = models.CharField(max_length=255)
+    creation_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        if self.filename:
+            return self.filename
+        return self.result_file.name.split('/')[-1]

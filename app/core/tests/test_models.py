@@ -6,6 +6,23 @@ from unittest.mock import MagicMock
 from core import models
 
 
+def sample_datafile(filename='test.txt'):
+    """Create and return sample datafile"""
+    file_mock = MagicMock(spec=File)
+    file_mock.name = filename
+
+    defaults = {
+        'experiment': models.Experiment.objects.create(name='MINERvA'),
+        'measurement': models.Measurement.objects.create(name='CC0pi'),
+        'variable': 'test variable',
+        'x_axis': 'X AXIS NAME',
+        'y_axis': 'Y_AXIS_NAME',
+        'filename': file_mock.name,
+        'input_file': file_mock
+    }
+    return models.Datafile.objects.create(**defaults)
+
+
 class ModelTests(TestCase):
 
     def test_create_user_with_email_successful(self):
@@ -68,7 +85,7 @@ class ModelTests(TestCase):
         self.assertEqual(str(nuwroversion), nuwroversion.name)
 
     def test_datafile_str(self):
-        """Test the DataFile string representation"""
+        """Test the Datafile string representation"""
         experiment = models.Experiment.objects.create(name='MINERvA')
         measurement = models.Measurement.objects.create(name='CC0pi')
         file_mock = MagicMock(spec=File)
@@ -83,7 +100,33 @@ class ModelTests(TestCase):
             input_file=file_mock
         )
 
-        exists = models.Datafile.objects.filter(
-            input_file=datafile.input_file
-        ).exists()
-        self.assertTrue(exists)
+        self.assertEqual(
+            str(datafile),
+            datafile.input_file.name.split('/')[-1]
+        )
+
+    def test_resultfile_str(self):
+        """Test the Resultfile string representation"""
+        experiment = models.Experiment.objects.create(name='MINERvA')
+        measurement = models.Measurement.objects.create(name='CC0pi')
+        nuwroversion = models.Nuwroversion.objects.create(name='v1.0')
+        file_mock = MagicMock(spec=File)
+        file_mock.name = 'test.txt'
+
+        file1 = sample_datafile('navon.txt')
+        file2 = sample_datafile('ashery.txt')
+
+        resultfile = models.Resultfile.objects.create(
+            experiment=experiment,
+            measurement=measurement,
+            nuwroversion=nuwroversion,
+            description='Test description',
+            result_file=file_mock,
+        )
+        resultfile.related_datafiles.add(file1)
+        resultfile.related_datafiles.add(file2)
+
+        self.assertEqual(
+            str(resultfile),
+            resultfile.result_file.name.split('/')[-1]
+        )

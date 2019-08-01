@@ -9,6 +9,7 @@ router.register('experiments', views.ExperimentViewSet)
 router.register('measurements', views.MeasurementViewSet)
 router.register('nuwroversions', views.NuwroversionViewSet)
 router.register('datafiles', views.DatafileViewSet)
+router.register('resultfiles', views.ResultfileViewSet)
 
 app_name = 'manager'
 
