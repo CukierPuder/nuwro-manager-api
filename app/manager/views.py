@@ -39,7 +39,8 @@ def generate_resultfile_link(experiment_name,
 
 class BaseFileAttrViewSet(viewsets.GenericViewSet,
                           mixins.ListModelMixin,
-                          mixins.CreateModelMixin):
+                          mixins.CreateModelMixin,
+                          mixins.RetrieveModelMixin):
     """Base viewset for DataFile and ResultFile"""
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
