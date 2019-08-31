@@ -10,11 +10,11 @@ from rest_framework.test import APIClient
 
 from unittest.mock import MagicMock
 
-from manager.serializers import ResultfileSerializer, ResultfileDetailSerializer
+from manager.serializers import (
+    ResultfileSerializer,
+    ResultfileDetailSerializer
+)
 from core.models import (
-    Datafile,
-    Experiment,
-    Measurement,
     Nuwroversion,
     Resultfile
 )
@@ -37,9 +37,7 @@ def generate_file_link(experiment_name,
         (f'media/uploads/resultfiles'
          f'/{experiment_name}'
          f'/{measurement_name}'
-         f'/{nuwroversion_name}'),
-         filename
-    )
+         f'/{nuwroversion_name}'), filename)
 
 
 def detail_url(resultfile_id):
@@ -72,7 +70,6 @@ def sample_resultfile(filename='test.txt'):
     resultfile.related_datafiles.add(sample_datafile('ashery.txt'))
 
     return resultfile
-    
 
 
 class PublicResultfileApiTests(TestCase):
@@ -130,7 +127,7 @@ class PrivateResultfileApiTests(TestCase):
             'result_file': file_mock,
             'related_datafiles': [datafile1.id, datafile2.id]
         }
-        
+
         res = self.client.post(RESULTFILES_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
@@ -150,4 +147,3 @@ class PrivateResultfileApiTests(TestCase):
         print(f'--- SERIALIZER DATA --- {serializer.data}')
 
         self.assertEqual(res.data, serializer.data)
-
