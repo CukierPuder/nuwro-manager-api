@@ -143,7 +143,4 @@ class PrivateResultfileApiTests(TestCase):
         res = self.client.get(url)
         serializer = ResultfileDetailSerializer(resultfile)
 
-        print(f'--- RES DATA --- {res.data}')
-        print(f'--- SERIALIZER DATA --- {serializer.data}')
-
         self.assertEqual(res.data, serializer.data)
