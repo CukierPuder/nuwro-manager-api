@@ -12,6 +12,11 @@ from manager.serializers import ExperimentSerializer
 EXPERIMENTS_URL = reverse('manager:experiment-list')
 
 
+def detail_url(experiment_id):
+    """Return experiment detail url"""
+    return reverse('manager:experiment-detail', args=[experiment_id])
+
+
 class PublicExperimentApiTests(TestCase):
     """Test the publicly available experiments API"""
 
@@ -59,3 +64,16 @@ class PrivateExperimentApiTests(TestCase):
         payload = {'name': ''}
         res = self.client.post(EXPERIMENTS_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_particular_experiment(self):
+        """Test patching an existing experiment"""
+        Experiment.objects.create(name='MINERvA')
+        Experiment.objects.create(name='MINERvB')
+        exp_to_patch = Experiment.objects.get(name='MINERvA')
+        url = detail_url(exp_to_patch.id)
+        payload = {'name': 'MINERvC'}
+        res = self.client.patch(url, payload)
+        exists = Experiment.objects.filter(name=payload['name']).exists()
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(exists)

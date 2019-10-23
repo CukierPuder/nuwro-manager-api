@@ -12,6 +12,11 @@ from manager.serializers import NuwroversionSerializer
 NUWROVERIONS_URL = reverse('manager:nuwroversion-list')
 
 
+def detail_url(nuwroversion_id):
+    """Return nuwroversion detail url"""
+    return reverse('manager:nuwroversion-detail', args=[nuwroversion_id])
+
+
 class PublicNuwroversionApiTests(TestCase):
     """Test publicly available nuwroversion API"""
 
@@ -59,3 +64,16 @@ class PrivateNuwroversionApiTest(TestCase):
         payload = {'name': ''}
         res = self.client.post(NUWROVERIONS_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_particular_nuwroversion(self):
+        """Test patching an existing nuwroversion"""
+        Nuwroversion.objects.create(name='CC0px')
+        Nuwroversion.objects.create(name='CC0')
+        nuwroversion_to_patch = Nuwroversion.objects.get(name='CC0px')
+        url = detail_url(nuwroversion_to_patch.id)
+        payload = {'name': 'XX0pc'}
+        res = self.client.patch(url, payload)
+        exists = Nuwroversion.objects.filter(name=payload['name']).exists()
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(exists)

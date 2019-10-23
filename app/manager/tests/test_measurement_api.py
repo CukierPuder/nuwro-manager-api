@@ -12,6 +12,11 @@ from manager.serializers import MeasurementSerializer
 MEASUREMENTS_URL = reverse('manager:measurement-list')
 
 
+def detail_url(measurement_id):
+    """Return measurement detail url"""
+    return reverse('manager:measurement-detail', args=[measurement_id])
+
+
 class PublicMeasurementApiTests(TestCase):
     """Test publicly available measurements API"""
 
@@ -59,3 +64,16 @@ class PrivateMeasurementApiTests(TestCase):
         payload = {'name': ''}
         res = self.client.post(MEASUREMENTS_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_particular_measurement(self):
+        """Test patching an existing measurement"""
+        Measurement.objects.create(name='CC0px')
+        Measurement.objects.create(name='CC0')
+        measurement_to_patch = Measurement.objects.get(name='CC0px')
+        url = detail_url(measurement_to_patch.id)
+        payload = {'name': 'XX0pc'}
+        res = self.client.patch(url, payload)
+        exists = Measurement.objects.filter(name=payload['name']).exists()
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(exists)
