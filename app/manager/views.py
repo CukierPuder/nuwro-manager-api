@@ -78,10 +78,12 @@ class DatafileViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """Retrieve the datafiles for the authenticated user"""
-        return self.queryset
+        return Datafile.objects.all()
 
     def get_serializer_class(self):
         """Return apropriate serializer class"""
+        if self.action == 'list':
+            return serializers.DatafileListSerializer
         if self.action == 'retrieve':
             return serializers.DatafileDetailSerializer
 

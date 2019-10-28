@@ -49,11 +49,21 @@ class DatafileSerializer(serializers.ModelSerializer):
         model = Datafile
         fields = (
             'id', 'experiment', 'measurement', 'variable', 'x_axis',
-            'y_axis', 'filename', 'input_file', 'link')
-        read_only_fields = ('id', 'filename', 'link')
+            'y_axis', 'filename', 'input_file', 'link', 'creation_date')
+        read_only_fields = ('id', 'filename', 'link', 'creation_date')
         extra_kwargs = {
             'input_file': {'write_only': True}
         }
+
+
+class DatafileListSerializer(serializers.ModelSerializer):
+    experiment = ExperimentSerializer()
+    measurement = MeasurementSerializer()
+
+    class Meta:
+        model = Datafile
+        fields = ('id', 'experiment', 'measurement', 'variable', 'x_axis',
+                'y_axis', 'filename', 'link', 'creation_date')
 
 
 class DatafileDetailSerializer(DatafileSerializer):
