@@ -45,14 +45,14 @@ def sample_measurement(name='CC0pi'):
     return Measurement.objects.create(name=name)
 
 
-def sample_datafile(filename='test.txt'):
+def sample_datafile(filename='test.txt', experiment='MINERvA', measurement='CC0pi'):
     """Create and return sample datafile"""
     file_mock = MagicMock(spec=File)
     file_mock.name = filename
 
     defaults = {
-        'experiment': sample_experiment(),
-        'measurement': sample_measurement(),
+        'experiment': sample_experiment(experiment),
+        'measurement': sample_measurement(measurement),
         'variable': 'test variable',
         'x_axis': 'X AXIS NAME',
         'y_axis': 'Y_AXIS_NAME',
@@ -137,3 +137,25 @@ class PrivateDatafileApiTests(TestCase):
         serializer = DatafileDetailSerializer(datafile)
 
         self.assertEqual(res.data, serializer.data)
+
+    def test_filter_datafile_by_experiment_and_measurement(self):
+        """Test returning the datafiles with specific experiment and measurement"""
+        datafile1 = sample_datafile(filename='ashery.txt', experiment='MINERvA', measurement='CC0pi')
+        datafile2 = sample_datafile(filename='navon.txt', experiment='MINERvA', measurement='CC0pi')
+        datafile3 = sample_datafile(filename='ashon.txt', experiment='MINERvB', measurement='CC0')
+
+        res = self.client.get(
+            DATAFILES_URL,
+            {
+                'experiment': f'{datafile1.experiment.id}',
+                'measurement': f'{datafile1.measurement.id}'
+            }
+        )
+
+        ser1 = DatafileListSerializer(datafile1)
+        ser2 = DatafileListSerializer(datafile2)
+        ser3 = DatafileListSerializer(datafile3)
+
+        self.assertIn(ser1.data, res.data)
+        self.assertIn(ser2.data, res.data)
+        self.assertNotIn(ser3.data, res.data)

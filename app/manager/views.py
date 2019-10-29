@@ -78,6 +78,13 @@ class DatafileViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """Retrieve the datafiles for the authenticated user"""
+        experiment_str = self.request.query_params.get('experiment')
+        measurement_str = self.request.query_params.get('measurement')
+
+        if experiment_str and measurement_str:
+            experiment_instance = Experiment.objects.get(pk=int(experiment_str))
+            measurement_instance = Measurement.objects.get(pk=int(measurement_str))
+            return Datafile.objects.filter(experiment__name=experiment_instance.name, measurement__name=measurement_instance.name)
         return Datafile.objects.all()
 
     def get_serializer_class(self):
