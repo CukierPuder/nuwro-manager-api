@@ -72,6 +72,19 @@ class DatafileDetailSerializer(DatafileSerializer):
     measurement = MeasurementSerializer(read_only=True)
 
 
+class ResultfileListSerializer(serializers.ModelSerializer):
+    experiment = ExperimentSerializer(read_only=True)
+    measurement = MeasurementSerializer(read_only=True)
+    nuwroversion = NuwroversionSerializer(read_only=True)
+    related_datafiles = DatafileDetailSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Resultfile
+        fields = ('id', 'experiment', 'measurement', 'nuwroversion',
+                  'description', 'x_axis', 'y_axis', 'filename',
+                  'link', 'related_datafiles', 'creation_date')
+
+
 class ResultfileSerializer(serializers.ModelSerializer):
     """Serializer for Datafile objects"""
     experiment = serializers.PrimaryKeyRelatedField(

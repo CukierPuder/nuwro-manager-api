@@ -124,10 +124,12 @@ class ResultfileViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """Retrieve the Resultfiles"""
-        return self.queryset
+        return Resultfile.objects.all()
 
     def get_serializer_class(self):
         """Return apropriate serializer class"""
+        if self.action == 'list':
+            return serializers.ResultfileListSerializer
         if self.action == 'retrieve':
             return serializers.ResultfileDetailSerializer
         return serializers.ResultfileSerializer
