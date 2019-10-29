@@ -13,6 +13,7 @@ RUN mkdir /app
 WORKDIR /app
 COPY ./app /app
 
+RUN mkdir -p ../media/
 RUN mkdir -p /vol/web/media
 RUN mkdir -p /vol/web/static
 
