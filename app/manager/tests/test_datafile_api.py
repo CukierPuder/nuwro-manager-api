@@ -12,7 +12,10 @@ from rest_framework.test import APIClient
 from unittest.mock import MagicMock
 
 from core.models import Datafile, Experiment, Measurement
-from manager.serializers import DatafileSerializer, DatafileDetailSerializer
+from manager.serializers import (
+    DatafileListSerializer,
+    DatafileDetailSerializer
+)
 
 
 DATAFILES_URL = reverse('manager:datafile-list')
@@ -89,7 +92,7 @@ class PrivateDatafileApiTests(TestCase):
 
         res = self.client.get(DATAFILES_URL)
         datafiles = Datafile.objects.all()
-        serializer = DatafileSerializer(datafiles, many=True)
+        serializer = DatafileListSerializer(datafiles, many=True)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)

@@ -63,7 +63,7 @@ class DatafileListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Datafile
         fields = ('id', 'experiment', 'measurement', 'variable', 'x_axis',
-                'y_axis', 'filename', 'link', 'creation_date')
+                  'y_axis', 'filename', 'link', 'creation_date')
 
 
 class DatafileDetailSerializer(DatafileSerializer):
@@ -93,7 +93,8 @@ class ResultfileSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'experiment', 'measurement', 'nuwroversion',
             'description', 'x_axis', 'y_axis', 'filename',
-            'result_file', 'related_datafiles', 'link'
+            'result_file', 'related_datafiles', 'link',
+            'creation_date'
         )
         read_only_fields = ('id', 'filename', 'link')
         extra_kwargs = {
