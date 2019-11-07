@@ -11,7 +11,7 @@ from rest_framework.test import APIClient
 from unittest.mock import MagicMock
 
 from manager.serializers import (
-    ResultfileSerializer,
+    ResultfileListSerializer,
     ResultfileDetailSerializer
 )
 from core.models import (
@@ -101,7 +101,7 @@ class PrivateResultfileApiTests(TestCase):
 
         res = self.client.get(RESULTFILES_URL)
         resultfiles = Resultfile.objects.all()
-        serializer = ResultfileSerializer(resultfiles, many=True)
+        serializer = ResultfileListSerializer(resultfiles, many=True)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)

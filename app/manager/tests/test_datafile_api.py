@@ -45,7 +45,11 @@ def sample_measurement(name='CC0pi'):
     return Measurement.objects.create(name=name)
 
 
-def sample_datafile(filename='test.txt', experiment='MINERvA', measurement='CC0pi'):
+def sample_datafile(
+    filename='test.txt',
+    experiment='MINERvA',
+    measurement='CC0pi'
+):
     """Create and return sample datafile"""
     file_mock = MagicMock(spec=File)
     file_mock.name = filename
@@ -139,10 +143,22 @@ class PrivateDatafileApiTests(TestCase):
         self.assertEqual(res.data, serializer.data)
 
     def test_filter_datafile_by_experiment_and_measurement(self):
-        """Test returning the datafiles with specific experiment and measurement"""
-        datafile1 = sample_datafile(filename='ashery.txt', experiment='MINERvA', measurement='CC0pi')
-        datafile2 = sample_datafile(filename='navon.txt', experiment='MINERvA', measurement='CC0pi')
-        datafile3 = sample_datafile(filename='ashon.txt', experiment='MINERvB', measurement='CC0')
+        """Test returning datafiles filtered by experiment and measurement"""
+        datafile1 = sample_datafile(
+            filename='ashery.txt',
+            experiment='MINERvA',
+            measurement='CC0pi'
+        )
+        datafile2 = sample_datafile(
+            filename='navon.txt',
+            experiment='MINERvA',
+            measurement='CC0pi'
+        )
+        datafile3 = sample_datafile(
+            filename='ashon.txt',
+            experiment='MINERvB',
+            measurement='CC0'
+        )
 
         res = self.client.get(
             DATAFILES_URL,
