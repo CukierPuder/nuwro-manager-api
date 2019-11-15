@@ -58,8 +58,6 @@ def sample_datafile(
         'experiment': sample_experiment(experiment),
         'measurement': sample_measurement(measurement),
         'variable': 'test variable',
-        'x_axis': 'X AXIS NAME',
-        'y_axis': 'Y_AXIS_NAME',
         'filename': file_mock.name,
         'input_file': file_mock
     }
@@ -113,8 +111,6 @@ class PrivateDatafileApiTests(TestCase):
             'experiment': experiment.id,
             'measurement': measurement.id,
             'variable': 'Test variable',
-            'x_axis': 'X AXIS NAME',
-            'y_axis': 'Y AXIS NAME',
             'filename': file_mock.name,
             'input_file': file_mock
         }

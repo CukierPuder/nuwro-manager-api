@@ -15,8 +15,6 @@ def sample_datafile(filename='test.txt'):
         'experiment': models.Experiment.objects.create(name='MINERvA'),
         'measurement': models.Measurement.objects.create(name='CC0pi'),
         'variable': 'test variable',
-        'x_axis': 'X AXIS NAME',
-        'y_axis': 'Y_AXIS_NAME',
         'filename': file_mock.name,
         'input_file': file_mock
     }
@@ -95,8 +93,6 @@ class ModelTests(TestCase):
             experiment=experiment,
             measurement=measurement,
             variable='some variable',
-            x_axis='X AXIS',
-            y_axis='Y AXIS',
             input_file=file_mock
         )
 

@@ -91,8 +91,6 @@ class Datafile(models.Model):
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
     measurement = models.ForeignKey(Measurement, on_delete=models.CASCADE)
     variable = models.CharField(max_length=255, blank=True)
-    x_axis = models.CharField(max_length=255)
-    y_axis = models.CharField(max_length=255)
     filename = models.CharField(max_length=255)
     input_file = models.FileField(
         unique=True,
