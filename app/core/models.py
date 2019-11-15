@@ -111,6 +111,7 @@ class Resultfile(models.Model):
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
     measurement = models.ForeignKey(Measurement, on_delete=models.CASCADE)
     nuwroversion = models.ForeignKey(Nuwroversion, on_delete=models.CASCADE)
+    is_3d = models.BooleanField(default=False)
     description = models.TextField(blank=True)
     x_axis = models.CharField(max_length=255)
     y_axis = models.CharField(max_length=255)

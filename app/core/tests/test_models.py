@@ -116,6 +116,7 @@ class ModelTests(TestCase):
             experiment=experiment,
             measurement=measurement,
             nuwroversion=nuwroversion,
+            is_3d=False,
             description='Test description',
             result_file=file_mock,
         )

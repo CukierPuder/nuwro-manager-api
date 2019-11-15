@@ -80,9 +80,9 @@ class ResultfileListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Resultfile
-        fields = ('id', 'experiment', 'measurement', 'nuwroversion',
-                  'description', 'x_axis', 'y_axis', 'filename',
-                  'link', 'related_datafiles', 'creation_date')
+        fields = ('id', 'experiment', 'measurement', 'nuwroversion', 'is_3d',
+                  'description', 'x_axis', 'y_axis', 'filename', 'link',
+                  'related_datafiles', 'creation_date')
 
 
 class ResultfileSerializer(serializers.ModelSerializer):
@@ -104,10 +104,9 @@ class ResultfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resultfile
         fields = (
-            'id', 'experiment', 'measurement', 'nuwroversion',
-            'description', 'x_axis', 'y_axis', 'filename',
-            'result_file', 'related_datafiles', 'link',
-            'creation_date'
+            'id', 'experiment', 'measurement', 'nuwroversion', 'is_3d',
+            'description', 'x_axis', 'y_axis', 'filename', 'result_file',
+            'related_datafiles', 'link', 'creation_date'
         )
         read_only_fields = ('id', 'filename', 'link')
         extra_kwargs = {
