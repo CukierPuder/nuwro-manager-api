@@ -14,10 +14,11 @@ services:
             python manage.py migrate &&
             python manage.py runserver 0.0.0.0:8000"
     environment:
-      - DB_HOST=db # name of the database service
-      - DB_NAME=app # same as the POSTGRES_DB name
-      - DB_USER=postgres
-      - DB_PASS=supersecretpassword
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
     depends_on: # list of depengind services
       - db # this means the 'db' service will start BEFORE this (app) service
   
