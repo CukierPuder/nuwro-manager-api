@@ -26,11 +26,11 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'localhost'
+    os.environ['HOST_ADDR']
 ]
 
 CORS_ORIGIN_WHITELIST = [
-    'http://localhost:8080'
+    f'http://{os.environ["HOST_ADDR"]}:8080'
 ]
 CORS_ALLOW_CREDENTIALS = True
 
