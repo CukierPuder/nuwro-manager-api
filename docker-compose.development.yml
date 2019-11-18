@@ -13,6 +13,7 @@ services:
             python manage.py migrate &&
             python manage.py runserver 0.0.0.0:8000"
     environment:
+      - DJANGO_SETTINGS=dev
       - DB_HOST=db # name of the database service
       - DB_NAME=app # same as the POSTGRES_DB name
       - DB_USER=postgres
