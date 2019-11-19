@@ -4,22 +4,14 @@ services:
   app:
     build: 
       context: .
-    ports:
-      - "8000:8000"
     volumes:
       - ./app:/app
       - ../media:/vol/web/media
-    command: >
-      sh -c "python manage.py wait_for_db &&
-            python manage.py migrate &&
-            python manage.py runserver 0.0.0.0:8000"
-    environment:
-      - HOST_ADDR=${HOST_ADDR}
-      - DB_HOST=${DB_HOST}
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASS}
-      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+    command: gunicorn app.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.env
     depends_on: # list of depengind services
       - db # this means the 'db' service will start BEFORE this (app) service
   
