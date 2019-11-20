@@ -26,7 +26,7 @@ SECRET_KEY = '99vi!d11by#v1qvf=lku(p3@_o+1(mz^_gm%lgebduwuk9jzar'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '172.18.0.3'
+    'localhost'
 ]
 
 CORS_ORIGIN_WHITELIST = [
