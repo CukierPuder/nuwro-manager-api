@@ -26,11 +26,11 @@ SECRET_KEY = '99vi!d11by#v1qvf=lku(p3@_o+1(mz^_gm%lgebduwuk9jzar'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost'
+    '127.0.0.1'
 ]
 
 CORS_ORIGIN_WHITELIST = [
-    'http://localhost:8080'
+    'http://127.0.0.1:8080'
 ]
 
 # Application definition
