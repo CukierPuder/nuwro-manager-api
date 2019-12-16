@@ -15,13 +15,10 @@ from manager.serializers import (
     ResultfileDetailSerializer
 )
 from core.models import (
+    Experiment,
+    Measurement,
     Nuwroversion,
     Resultfile
-)
-from manager.tests.test_datafile_api import (
-    sample_experiment,
-    sample_measurement,
-    sample_datafile
 )
 
 
@@ -45,13 +42,23 @@ def detail_url(resultfile_id):
     return reverse('manager:resultfile-detail', args=[resultfile_id])
 
 
+def sample_experiment(name='MINERvA'):
+    """Create and return the sample experiment"""
+    return Experiment.objects.create(name=name)
+
+
+def sample_measurement(name='CC0pi'):
+    """Create and return the sample measurement"""
+    return Measurement.objects.create(name=name)
+
+
 def sample_nuwroversion(name='v1.0'):
     """Create and return the sample nuwroversion"""
     return Nuwroversion.objects.create(name=name)
 
 
 def sample_resultfile(filename='test.txt'):
-    """Create and return sample datafile"""
+    """Create and return sample Resultfile"""
     file_mock = MagicMock(spec=File)
     file_mock.name = filename
 
@@ -66,11 +73,7 @@ def sample_resultfile(filename='test.txt'):
         'filename': file_mock.name,
         'result_file': file_mock
     }
-    resultfile = Resultfile.objects.create(**defaults)
-    resultfile.related_datafiles.add(sample_datafile('navon.txt'))
-    resultfile.related_datafiles.add(sample_datafile('ashery.txt'))
-
-    return resultfile
+    return Resultfile.objects.create(**defaults)
 
 
 class PublicResultfileApiTests(TestCase):
@@ -112,8 +115,6 @@ class PrivateResultfileApiTests(TestCase):
         experiment = sample_experiment()
         measurement = sample_measurement()
         nuwroversion = sample_nuwroversion()
-        datafile1 = sample_datafile('navon.txt')
-        datafile2 = sample_datafile('ashery.txt')
         file_mock = MagicMock(spec=File)
         file_mock.name = 'test_result.txt'
 
@@ -127,7 +128,6 @@ class PrivateResultfileApiTests(TestCase):
             'y_axis': 'Y AXIS NAME',
             'filename': file_mock.name,
             'result_file': file_mock,
-            'related_datafiles': [datafile1.id, datafile2.id]
         }
 
         res = self.client.post(RESULTFILES_URL, payload)

@@ -6,19 +6,39 @@ from unittest.mock import MagicMock
 from core import models
 
 
-def sample_datafile(filename='test.txt'):
-    """Create and return sample datafile"""
+def sample_artifact(resultfile, filename='art1.txt'):
+    """Create and return sample artifact file"""
     file_mock = MagicMock(spec=File)
     file_mock.name = filename
 
     defaults = {
-        'experiment': models.Experiment.objects.create(name='MINERvA'),
-        'measurement': models.Measurement.objects.create(name='CC0pi'),
-        'variable': 'test variable',
+        'resultfile': resultfile,
         'filename': file_mock.name,
-        'input_file': file_mock
+        'artifact': file_mock
     }
-    return models.Datafile.objects.create(**defaults)
+    return models.Artifact.objects.create(**defaults)
+
+
+def sample_resultfile(experiment='MINERvA',
+                      measurement='CC0pi',
+                      nuwroversion='v1.0',
+                      filename='res.txt'):
+    """Create and return sample resultfile"""
+    file_mock = MagicMock(spec=File)
+    file_mock.name = filename
+
+    defaults = {
+        'experiment': models.Experiment.objects.create(name=experiment),
+        'measurement': models.Measurement.objects.create(name=measurement),
+        'nuwroversion': models.Nuwroversion.objects.create(name=nuwroversion),
+        'is_3d': False,
+        'description': 'Some random description',
+        'x_axis': 'X AXIS NAME',
+        'y_axis': 'Y AXIS NAME',
+        'filename': file_mock.name,
+        'result_file': file_mock
+    }
+    return models.Resultfile.objects.create(**defaults)
 
 
 class ModelTests(TestCase):
@@ -82,24 +102,17 @@ class ModelTests(TestCase):
         )
         self.assertEqual(str(nuwroversion), nuwroversion.name)
 
-    def test_datafile_str(self):
-        """Test the Datafile string representation"""
-        experiment = models.Experiment.objects.create(name='MINERvA')
-        measurement = models.Measurement.objects.create(name='CC0pi')
+    def test_artifact_str(self):
+        """Test the Artifact string representation"""
+        tmp_resultfile = sample_resultfile()
         file_mock = MagicMock(spec=File)
-        file_mock.name = 'test.txt'
+        file_mock.name = 'artifact_file.txt'
 
-        datafile = models.Datafile.objects.create(
-            experiment=experiment,
-            measurement=measurement,
-            variable='some variable',
-            input_file=file_mock
+        artifact = sample_artifact(
+            resultfile=tmp_resultfile,
+            filename=file_mock.name
         )
-
-        self.assertEqual(
-            str(datafile),
-            datafile.input_file.name.split('/')[-1]
-        )
+        self.assertEqual(str(artifact), artifact.filename.split('/')[-1])
 
     def test_resultfile_str(self):
         """Test the Resultfile string representation"""
@@ -109,9 +122,6 @@ class ModelTests(TestCase):
         file_mock = MagicMock(spec=File)
         file_mock.name = 'test.txt'
 
-        file1 = sample_datafile('navon.txt')
-        file2 = sample_datafile('ashery.txt')
-
         resultfile = models.Resultfile.objects.create(
             experiment=experiment,
             measurement=measurement,
@@ -120,8 +130,6 @@ class ModelTests(TestCase):
             description='Test description',
             result_file=file_mock,
         )
-        resultfile.related_datafiles.add(file1)
-        resultfile.related_datafiles.add(file2)
 
         self.assertEqual(
             str(resultfile),

@@ -18,6 +18,15 @@ def datafile_file_path(instance, filename):
     )
 
 
+def artifact_file_path(instance, filename):
+    """Generate filepath for new Artifact file"""
+    return os.path.join(
+        (f'uploads/artifacts/{instance.resultfile.experiment.name}/'
+         f'{instance.resultfile.measurement.name}/{instance.resultfile.filename.split(".")[0]}/'),
+        filename
+    )
+
+
 def resultfile_file_path(instance, filename):
     """Generate filepath for a new Resultfile file"""
     return os.path.join(
@@ -63,7 +72,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Experiment(models.Model):
-    """Experiment to be used for a ResultFile and DataFile"""
+    """Experiment to be used for a ResultFile"""
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -71,7 +80,7 @@ class Experiment(models.Model):
 
 
 class Measurement(models.Model):
-    """Measurement to be used for a ResultFile and DataFile"""
+    """Measurement to be used for a ResultFile"""
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -86,26 +95,6 @@ class Nuwroversion(models.Model):
         return self.name
 
 
-class Datafile(models.Model):
-    """Represents the nuwro input (data) file"""
-    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
-    measurement = models.ForeignKey(Measurement, on_delete=models.CASCADE)
-    variable = models.CharField(max_length=255, blank=True)
-    filename = models.CharField(max_length=255)
-    input_file = models.FileField(
-        unique=True,
-        null=False,
-        upload_to=datafile_file_path
-    )
-    link = models.CharField(max_length=255)
-    creation_date = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        if self.filename:
-            return self.filename
-        return self.input_file.name.split('/')[-1]
-
-
 class Resultfile(models.Model):
     """Respresents the nuwro result text file"""
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
@@ -113,15 +102,15 @@ class Resultfile(models.Model):
     nuwroversion = models.ForeignKey(Nuwroversion, on_delete=models.CASCADE)
     is_3d = models.BooleanField(default=False)
     description = models.TextField(blank=True)
-    x_axis = models.CharField(max_length=255)
-    y_axis = models.CharField(max_length=255)
+    x_axis = models.CharField(max_length=255, blank=False)
+    y_axis = models.CharField(max_length=255, blank=False)
+    z_axis = models.CharField(max_length=255, null=True)
     filename = models.CharField(max_length=255)
     result_file = models.FileField(
         unique=True,
         null=False,
         upload_to=resultfile_file_path
     )
-    related_datafiles = models.ManyToManyField('Datafile')
     link = models.CharField(max_length=255)
     creation_date = models.DateTimeField(auto_now_add=True)
 
@@ -129,3 +118,16 @@ class Resultfile(models.Model):
         if self.filename:
             return self.filename
         return self.result_file.name.split('/')[-1]
+
+
+class Artifact(models.Model):
+    resultfile = models.ForeignKey(Resultfile, on_delete=models.CASCADE, blank=False)
+    filename = models.CharField(max_length=255, blank=False)
+    artifact = models.FileField(null=False, upload_to=artifact_file_path, blank=False)
+    link = models.CharField(max_length=255)
+    addition_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        if self.filename:
+            return self.filename
+        return self.file.name.split('/')[-1]

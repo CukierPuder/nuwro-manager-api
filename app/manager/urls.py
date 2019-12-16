@@ -8,7 +8,7 @@ router = DefaultRouter()
 router.register('experiments', views.ExperimentViewSet)
 router.register('measurements', views.MeasurementViewSet)
 router.register('nuwroversions', views.NuwroversionViewSet)
-router.register('datafiles', views.DatafileViewSet)
+router.register('artifacts', views.ArtifactViewSet)
 router.register('resultfiles', views.ResultfileViewSet)
 
 app_name = 'manager'
