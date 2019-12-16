@@ -4,7 +4,7 @@ from core.models import (
     Experiment,
     Measurement,
     Nuwroversion,
-    Datafile,
+    Artifact,
     Resultfile
 )
 
@@ -36,57 +36,20 @@ class NuwroversionSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
 
-class DatafileSerializer(serializers.ModelSerializer):
-    """Serializer for Datafile objects"""
-    experiment = serializers.PrimaryKeyRelatedField(
-        queryset=Experiment.objects.all()
-    )
-    measurement = serializers.PrimaryKeyRelatedField(
-        queryset=Measurement.objects.all()
-    )
-
-    class Meta:
-        model = Datafile
-        fields = (
-            'id', 'experiment', 'measurement', 'variable',
-            'filename', 'input_file', 'link', 'creation_date')
-        read_only_fields = ('id', 'filename', 'link', 'creation_date')
-        extra_kwargs = {
-            'input_file': {'write_only': True}
-        }
-
-
-class DatafileListSerializer(serializers.ModelSerializer):
-    experiment = ExperimentSerializer()
-    measurement = MeasurementSerializer()
-
-    class Meta:
-        model = Datafile
-        fields = ('id', 'experiment', 'measurement', 'variable',
-                  'filename', 'link', 'creation_date')
-
-
-class DatafileDetailSerializer(DatafileSerializer):
-    """Serializer for a Datafile detail"""
-    experiment = ExperimentSerializer(read_only=True)
-    measurement = MeasurementSerializer(read_only=True)
-
-
 class ResultfileListSerializer(serializers.ModelSerializer):
     experiment = ExperimentSerializer(read_only=True)
     measurement = MeasurementSerializer(read_only=True)
     nuwroversion = NuwroversionSerializer(read_only=True)
-    related_datafiles = DatafileDetailSerializer(read_only=True, many=True)
 
     class Meta:
         model = Resultfile
         fields = ('id', 'experiment', 'measurement', 'nuwroversion', 'is_3d',
                   'description', 'x_axis', 'y_axis', 'filename', 'link',
-                  'related_datafiles', 'creation_date')
+                  'creation_date')
 
 
 class ResultfileSerializer(serializers.ModelSerializer):
-    """Serializer for Datafile objects"""
+    """Serializer for Resultfile objects"""
     experiment = serializers.PrimaryKeyRelatedField(
         queryset=Experiment.objects.all()
     )
@@ -96,17 +59,13 @@ class ResultfileSerializer(serializers.ModelSerializer):
     nuwroversion = serializers.PrimaryKeyRelatedField(
         queryset=Nuwroversion.objects.all()
     )
-    related_datafiles = serializers.PrimaryKeyRelatedField(
-        many=True,
-        queryset=Datafile.objects.all()
-    )
 
     class Meta:
         model = Resultfile
         fields = (
             'id', 'experiment', 'measurement', 'nuwroversion', 'is_3d',
             'description', 'x_axis', 'y_axis', 'filename', 'result_file',
-            'related_datafiles', 'link', 'creation_date'
+            'link', 'creation_date'
         )
         read_only_fields = ('id', 'filename', 'link')
         extra_kwargs = {
@@ -119,4 +78,21 @@ class ResultfileDetailSerializer(ResultfileSerializer):
     experiment = ExperimentSerializer(read_only=True)
     measurement = MeasurementSerializer(read_only=True)
     nuwroversion = NuwroversionSerializer(read_only=True)
-    related_datafiles = DatafileDetailSerializer(read_only=True, many=True)
+
+
+class ArtifactSerializer(serializers.ModelSerializer):
+    resultfile = serializers.PrimaryKeyRelatedField(
+        queryset=Resultfile.objects.all()
+    )
+
+    class Meta:
+        model = Artifact
+        fields = ('id', 'resultfile', 'filename', 'artifact', 'link', 'addition_date')
+        read_only_fields = ('id', 'filename', 'link', 'addition_date')
+        extra_kwargs = {
+            'artifact': {'write_only': True}
+        }
+
+
+class ArtifactDetailSerializer(ArtifactSerializer):
+    resultfile = ResultfileDetailSerializer
