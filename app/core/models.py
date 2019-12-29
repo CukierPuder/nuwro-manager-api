@@ -22,12 +22,11 @@ def artifact_file_path(instance, filename):
     """Generate filepath for new Artifact file"""
     return os.path.join(
         (f'uploads/artifacts'
-        f'/{instance.resultfile.experiment.name}'
-        f'/{instance.resultfile.measurement.name}'
-        f'/{instance.resultfile.nuwroversion.name}'
-        f'/{instance.resultfile.filename.split(".")[0]}'),
-        filename
-    )
+         f'/{instance.resultfile.experiment.name}'
+         f'/{instance.resultfile.measurement.name}'
+         f'/{instance.resultfile.nuwroversion.name}'
+         f'/{instance.resultfile.filename.split(".")[0]}'), filename
+        )
 
 
 def resultfile_file_path(instance, filename):
