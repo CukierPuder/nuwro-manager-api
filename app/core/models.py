@@ -1,4 +1,5 @@
 import os
+from uuid import uuid4
 
 from django.db import models
 from django.contrib.auth.models import (
@@ -10,33 +11,40 @@ from django.contrib.auth.models import (
 
 def datafile_file_path(instance, filename):
     """Generate filepath for new Datafile file"""
+    ext = filename.split('.')[-1]
+    uuid_filename = str(uuid4()).replace('-', '')
+
     return os.path.join(
         (f'uploads/datafiles/'
          f'{instance.experiment.name}'
-         f'/{instance.measurement.name}/'),
-        filename
+         f'/{instance.measurement.name}/'), uuid_filename.join(ext)
     )
 
 
 def artifact_file_path(instance, filename):
     """Generate filepath for new Artifact file"""
+    ext = filename.split('.')[-1]
+    uuid_filename = str(uuid4()).replace('-', '')
+
     return os.path.join(
         (f'uploads/artifacts'
          f'/{instance.resultfile.experiment.name}'
          f'/{instance.resultfile.measurement.name}'
          f'/{instance.resultfile.nuwroversion.name}'
-         f'/{instance.resultfile.filename.split(".")[0]}'), filename
+         f'/{instance.resultfile.filename.split(".")[0]}'), uuid_filename.join(ext)
         )
 
 
 def resultfile_file_path(instance, filename):
     """Generate filepath for a new Resultfile file"""
+    ext = filename.split('.')[-1]
+    uuid_filename = str(uuid4()).replace('-', '')
+
     return os.path.join(
         (f'uploads/resultfiles/'
          f'{instance.experiment.name}'
          f'/{instance.measurement.name}'
-         f'/{instance.nuwroversion.name}'),
-        filename
+         f'/{instance.nuwroversion.name}'), uuid_filename.join(ext)
     )
 
 
