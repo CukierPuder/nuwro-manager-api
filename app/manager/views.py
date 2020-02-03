@@ -14,36 +14,6 @@ from core.models import (
 from manager import serializers
 
 
-def generate_artifact_link(experiment_name,
-                           measurement_name,
-                           nuwroversion_name,
-                           resultfile_name,
-                           artifact_name):
-    """Generate filepath for new artifact file"""
-    return os.path.join((
-        f'media/uploads/artifacts'
-        f'/{experiment_name}'
-        f'/{measurement_name}'
-        f'/{nuwroversion_name}'
-        f'/{resultfile_name.split(".")[0]}'),
-        artifact_name
-    )
-
-
-def generate_resultfile_link(experiment_name,
-                             measurement_name,
-                             nuwroversion_name,
-                             filename):
-    """Generate filepath for new Resultfile file"""
-    return os.path.join((
-        f'media/uploads/resultfiles'
-        f'/{experiment_name}'
-        f'/{measurement_name}'
-        f'/{nuwroversion_name}'),
-        filename
-    )
-
-
 class BaseFileAttrViewSet(viewsets.GenericViewSet,
                           mixins.ListModelMixin,
                           mixins.CreateModelMixin,
@@ -122,13 +92,7 @@ class ResultfileViewSet(viewsets.ModelViewSet):
             pk=int(self.request.data['nuwroversion']))
 
         serializer.save(
-            filename=filename,
-            link=generate_resultfile_link(
-                experiment_instance,
-                measurement_instance,
-                nuwroversion_instance,
-                filename
-            )
+            filename=filename
         )
 
 
@@ -156,12 +120,5 @@ class ArtifactViewSet(viewsets.ModelViewSet):
         resultfile = Resultfile.objects.get(pk=int(self.request.data['resultfile']))
         serializer.save(
             resultfile=resultfile,
-            filename=self.request.data['filename'],
-            link=generate_artifact_link(
-                resultfile.experiment.name,
-                resultfile.measurement.name,
-                resultfile.nuwroversion.name,
-                resultfile.filename,
-                self.request.data['filename']
-            )
+            filename=self.request.data['filename']
         )

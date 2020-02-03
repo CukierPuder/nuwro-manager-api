@@ -136,7 +136,7 @@ class PrivateResultfileApiTests(TestCase):
     def test_file_exists_in_its_location(self):
         """Test the file exists in location provided by link field"""
         resultfile = sample_resultfile()
-        self.assertTrue(os.path.exists(f'/vol/web/{resultfile.link}'))
+        self.assertTrue(os.path.exists(resultfile.result_file.path))
 
     def test_view_resultfile_detail(self):
         """Test viewing a resultfile detail"""

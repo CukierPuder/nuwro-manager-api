@@ -6,37 +6,48 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin
 )
+from uuid import uuid4
 
 
 def datafile_file_path(instance, filename):
     """Generate filepath for new Datafile file"""
+    ext = filename.split('.')[-1]
+    uuid = str(uuid4()).replace('-', '')
+
     return os.path.join(
         (f'uploads/datafiles/'
          f'{instance.experiment.name}'
          f'/{instance.measurement.name}/'),
-        filename
+        '.'.join([uuid, ext])
     )
 
 
 def artifact_file_path(instance, filename):
     """Generate filepath for new Artifact file"""
+    ext = filename.split('.')[-1]
+    uuid = str(uuid4()).replace('-', '')
+
     return os.path.join(
         (f'uploads/artifacts'
          f'/{instance.resultfile.experiment.name}'
          f'/{instance.resultfile.measurement.name}'
          f'/{instance.resultfile.nuwroversion.name}'
-         f'/{instance.resultfile.filename.split(".")[0]}'), filename
+         f'/{instance.resultfile.filename.split(".")[0]}'),
+        '.'.join([uuid, ext])
         )
 
 
 def resultfile_file_path(instance, filename):
     """Generate filepath for a new Resultfile file"""
+    ext = filename.split('.')[-1]
+    uuid = str(uuid4()).replace('-', '')
+
     return os.path.join(
         (f'uploads/resultfiles/'
          f'{instance.experiment.name}'
          f'/{instance.measurement.name}'
          f'/{instance.nuwroversion.name}'),
-        filename
+        '.'.join([uuid, ext])
     )
 
 
@@ -113,7 +124,7 @@ class Resultfile(models.Model):
         null=False,
         upload_to=resultfile_file_path
     )
-    link = models.CharField(max_length=255)
+    link = models.CharField(max_length=255, null=True)
     creation_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -126,7 +137,7 @@ class Artifact(models.Model):
     resultfile = models.ForeignKey(Resultfile, on_delete=models.CASCADE, blank=False)
     filename = models.CharField(max_length=255, blank=False)
     artifact = models.FileField(null=False, upload_to=artifact_file_path, blank=False)
-    link = models.CharField(max_length=255)
+    link = models.CharField(max_length=255, null=True)
     addition_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

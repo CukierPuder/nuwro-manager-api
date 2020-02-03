@@ -60,6 +60,13 @@ class ResultfileSerializer(serializers.ModelSerializer):
         queryset=Nuwroversion.objects.all()
     )
 
+    def create(self, validated_data):
+        instance = Resultfile.objects.create(**validated_data)
+        instance.link = instance.result_file.path.replace('/vol/web/', '')
+        instance.save()
+
+        return instance
+
     class Meta:
         model = Resultfile
         fields = (
@@ -84,6 +91,12 @@ class ArtifactSerializer(serializers.ModelSerializer):
     resultfile = serializers.PrimaryKeyRelatedField(
         queryset=Resultfile.objects.all()
     )
+
+    def create(self, validated_data):
+        instance = Artifact.objects.create(**validated_data)
+        instance.link = instance.artifact.path.replace('/vol/web/', '')
+        instance.save()
+        return instance
 
     class Meta:
         model = Artifact

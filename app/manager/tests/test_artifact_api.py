@@ -119,18 +119,11 @@ class PrivateArtifactApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(tmp_resfile.id, res.data['resultfile'])
 
-        generated_file_link = generate_file_link(tmp_resfile.experiment.name,
-                                                 tmp_resfile.measurement.name,
-                                                 tmp_resfile.nuwroversion.name,
-                                                 tmp_resfile.filename,
-                                                 file_mock.name)
-        self.assertEqual(generated_file_link, res.data['link'])
-
     def test_file_exists_in_its_location(self):
         """Test the newly created file exists in location provided by link field"""
         tmp_resultfile = sample_resultfile()
         artifact = sample_artifact(tmp_resultfile)
-        self.assertTrue(os.path.exists(f'/vol/web/{artifact.link}'))
+        self.assertTrue(os.path.exists(artifact.artifact.path))
 
     def test_artifact_detail_view(self):
         """Test viewing an Artifact detail"""
