@@ -29,10 +29,9 @@ def artifact_file_path(instance, filename):
 
     return os.path.join(
         (f'uploads/artifacts'
-         f'/{instance.resultfile.experiment.name}'
-         f'/{instance.resultfile.measurement.name}'
-         f'/{instance.resultfile.nuwroversion.name}'
-         f'/{instance.resultfile.filename.split(".")[0]}'),
+         f'/{instance.experiment.name}'
+         f'/{instance.measurement.name}'
+         f'/{instance.filename.split(".")[0]}'),
         '.'.join([uuid, ext])
         )
 
@@ -131,11 +130,15 @@ class Resultfile(models.Model):
         if self.filename:
             return self.filename
         return self.result_file.name.split('/')[-1]
+    
+    class Meta:
+        ordering = ['-creation_date']
 
 
 class Artifact(models.Model):
-    resultfile = models.ForeignKey(Resultfile, on_delete=models.CASCADE, blank=False)
     filename = models.CharField(max_length=255, blank=False)
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
+    measurement = models.ForeignKey(Measurement, on_delete=models.CASCADE)
     artifact = models.FileField(null=False, upload_to=artifact_file_path, blank=False)
     link = models.CharField(max_length=255, null=True)
     addition_date = models.DateTimeField(auto_now_add=True)
@@ -144,3 +147,6 @@ class Artifact(models.Model):
         if self.filename:
             return self.filename
         return self.file.name.split('/')[-1]
+    
+    class Meta:
+        ordering = ['-addition_date']

@@ -1,3 +1,6 @@
+static/
+media/
+
 # IDEs workspace dirs
 .vscode/
 .idea/

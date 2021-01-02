@@ -62,7 +62,7 @@ class ResultfileSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         instance = Resultfile.objects.create(**validated_data)
-        instance.link = instance.result_file.path.replace('/vol/web/', '')
+        instance.link = instance.result_file.url
         instance.save()
 
         return instance
@@ -88,24 +88,26 @@ class ResultfileDetailSerializer(ResultfileSerializer):
 
 
 class ArtifactSerializer(serializers.ModelSerializer):
-    resultfile = serializers.PrimaryKeyRelatedField(
-        queryset=Resultfile.objects.all()
-    )
 
     def create(self, validated_data):
         instance = Artifact.objects.create(**validated_data)
-        instance.link = instance.artifact.path.replace('/vol/web/', '')
+        instance.link = instance.artifact.url
         instance.save()
         return instance
 
     class Meta:
         model = Artifact
-        fields = ('id', 'resultfile', 'filename', 'artifact', 'link', 'addition_date')
+        fields = ('id', 'experiment', 'measurement', 'filename', 'artifact', 'link', 'addition_date')
         read_only_fields = ('id', 'filename', 'link', 'addition_date')
         extra_kwargs = {
             'artifact': {'write_only': True}
         }
 
 
-class ArtifactDetailSerializer(ArtifactSerializer):
-    resultfile = ResultfileDetailSerializer
+class ArtifactListSerializer(serializers.ModelSerializer):
+    experiment = ExperimentSerializer()
+    measurement = MeasurementSerializer()
+
+    class Meta:
+        model = Artifact
+        fields = ['id', 'experiment', 'measurement', 'filename', 'artifact', 'link', 'addition_date']

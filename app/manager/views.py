@@ -25,7 +25,7 @@ class BaseFileAttrViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
         """Return the list of all objects ordered by name"""
-        return self.queryset.order_by('-name')
+        return self.queryset.order_by('id')
 
 
 class ExperimentViewSet(BaseFileAttrViewSet):
@@ -98,27 +98,20 @@ class ResultfileViewSet(viewsets.ModelViewSet):
 
 class ArtifactViewSet(viewsets.ModelViewSet):
     """Manage artifacts in database"""
-    serializer_class = serializers.ArtifactSerializer
     queryset = Artifact.objects.all()
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         """Retrieve the artifacts for the authenticated user"""
-        if self.request.query_params.get('resultfile'):
-            return Artifact.objects.filter(resultfile__pk=int(self.request.query_params.get('resultfile')))
         return Artifact.objects.all()
+    
 
     def get_serializer_class(self):
-        """Return the apropriate serializer class"""
-        if self.action == 'retrieve':
-            return serializers.ArtifactDetailSerializer
-        return serializers.ArtifactSerializer
+        return serializers.ArtifactSerializer if self.action == 'create' else serializers.ArtifactListSerializer
 
     def perform_create(self, serializer):
         """Create new object and save file in FS"""
-        resultfile = Resultfile.objects.get(pk=int(self.request.data['resultfile']))
         serializer.save(
-            resultfile=resultfile,
             filename=self.request.data['filename']
         )
