@@ -68,8 +68,6 @@ def sample_resultfile(filename='test.txt'):
         'nuwroversion': sample_nuwroversion(),
         'is_3d': False,
         'description': 'Test description',
-        'x_axis': 'X AXIS NAME',
-        'y_axis': 'Y AXIS NAME',
         'filename': file_mock.name,
         'result_file': file_mock
     }
@@ -124,8 +122,6 @@ class PrivateResultfileApiTests(TestCase):
             'nuwroversion': nuwroversion.id,
             'is_3d': True,
             'description': 'Test description',
-            'x_axis': 'X AXIS NAME',
-            'y_axis': 'Y AXIS NAME',
             'filename': file_mock.name,
             'result_file': file_mock,
         }

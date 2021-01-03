@@ -33,8 +33,6 @@ def sample_resultfile(experiment='MINERvA',
         'nuwroversion': models.Nuwroversion.objects.create(name=nuwroversion),
         'is_3d': False,
         'description': 'Some random description',
-        'x_axis': 'X AXIS NAME',
-        'y_axis': 'Y AXIS NAME',
         'filename': file_mock.name,
         'result_file': file_mock
     }

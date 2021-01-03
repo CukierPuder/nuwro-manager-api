@@ -44,8 +44,7 @@ class ResultfileListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resultfile
         fields = ('id', 'experiment', 'measurement', 'nuwroversion', 'is_3d',
-                  'description', 'x_axis', 'y_axis', 'filename', 'link',
-                  'creation_date')
+                  'description', 'filename', 'link', 'creation_date')
 
 
 class ResultfileSerializer(serializers.ModelSerializer):
@@ -62,7 +61,7 @@ class ResultfileSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         instance = Resultfile.objects.create(**validated_data)
-        instance.link = instance.result_file.path.replace('/vol/web/', '')
+        instance.link = instance.result_file.url
         instance.save()
 
         return instance
@@ -71,8 +70,7 @@ class ResultfileSerializer(serializers.ModelSerializer):
         model = Resultfile
         fields = (
             'id', 'experiment', 'measurement', 'nuwroversion', 'is_3d',
-            'description', 'x_axis', 'y_axis', 'filename', 'result_file',
-            'link', 'creation_date'
+            'description', 'filename', 'result_file', 'link', 'creation_date'
         )
         read_only_fields = ('id', 'filename', 'link')
         extra_kwargs = {
@@ -94,7 +92,7 @@ class ArtifactSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         instance = Artifact.objects.create(**validated_data)
-        instance.link = instance.artifact.path.replace('/vol/web/', '')
+        instance.link = instance.artifact.url
         instance.save()
         return instance
 

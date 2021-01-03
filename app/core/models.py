@@ -115,9 +115,6 @@ class Resultfile(models.Model):
     nuwroversion = models.ForeignKey(Nuwroversion, on_delete=models.CASCADE)
     is_3d = models.BooleanField(default=False)
     description = models.TextField(blank=True)
-    x_axis = models.CharField(max_length=255, blank=False)
-    y_axis = models.CharField(max_length=255, blank=False)
-    z_axis = models.CharField(max_length=255, null=True)
     filename = models.CharField(max_length=255)
     result_file = models.FileField(
         unique=True,

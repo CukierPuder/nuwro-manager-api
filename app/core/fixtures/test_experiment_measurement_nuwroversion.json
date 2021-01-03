@@ -1,0 +1,86 @@
+[
+{
+  "model": "core.experiment",
+  "pk": 1,
+  "fields": {
+    "name": "exp_1"
+  }
+},
+{
+  "model": "core.experiment",
+  "pk": 2,
+  "fields": {
+    "name": "exp_2"
+  }
+},
+{
+  "model": "core.experiment",
+  "pk": 3,
+  "fields": {
+    "name": "exp_3"
+  }
+},
+{
+  "model": "core.experiment",
+  "pk": 4,
+  "fields": {
+    "name": "exp_4"
+  }
+},
+{
+  "model": "core.measurement",
+  "pk": 1,
+  "fields": {
+    "name": "meas_1"
+  }
+},
+{
+  "model": "core.measurement",
+  "pk": 2,
+  "fields": {
+    "name": "meas_2"
+  }
+},
+{
+  "model": "core.measurement",
+  "pk": 3,
+  "fields": {
+    "name": "meas_3"
+  }
+},
+{
+  "model": "core.measurement",
+  "pk": 4,
+  "fields": {
+    "name": "meas_4"
+  }
+},
+{
+  "model": "core.nuwroversion",
+  "pk": 1,
+  "fields": {
+    "name": "v1_1"
+  }
+},
+{
+  "model": "core.nuwroversion",
+  "pk": 2,
+  "fields": {
+    "name": "v1_2"
+  }
+},
+{
+  "model": "core.nuwroversion",
+  "pk": 3,
+  "fields": {
+    "name": "v1_3"
+  }
+},
+{
+  "model": "core.nuwroversion",
+  "pk": 4,
+  "fields": {
+    "name": "v1_4"
+  }
+}
+]
