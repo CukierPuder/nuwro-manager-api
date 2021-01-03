@@ -2,6 +2,11 @@
 .vscode/
 .idea/
 
+media/
+static/
+app/media/
+app/static/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
