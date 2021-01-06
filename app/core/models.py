@@ -1,11 +1,8 @@
 import os
 
 from django.db import models
-from django.contrib.auth.models import (
-    AbstractBaseUser,
-    BaseUserManager,
-    PermissionsMixin
-)
+from django.dispatch import receiver
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from uuid import uuid4
 
 
@@ -130,8 +127,19 @@ class Resultfile(models.Model):
         return self.result_file.name.split('/')[-1]
 
 
+@receiver(models.signals.post_delete, sender=Resultfile)
+def auto_delete_resultfile(sender, instance, **kwargs):
+    """
+    Deletes file from filesystem
+    when corresponding `Resultfile` object is deleted.
+    """
+    if instance.result_file:
+        if os.path.isfile(instance.result_file.path):
+            os.remove(instance.result_file.path)
+
+
 class Artifact(models.Model):
-    resultfile = models.ForeignKey(Resultfile, on_delete=models.CASCADE, blank=False)
+    resultfile = models.ForeignKey(Resultfile, on_delete=models.CASCADE, related_name='artifacts', blank=False)
     filename = models.CharField(max_length=255, blank=False)
     artifact = models.FileField(null=False, upload_to=artifact_file_path, blank=False)
     link = models.CharField(max_length=255, null=True)
@@ -141,3 +149,14 @@ class Artifact(models.Model):
         if self.filename:
             return self.filename
         return self.file.name.split('/')[-1]
+
+
+@receiver(models.signals.post_delete, sender=Artifact)
+def auto_delete_artifact(sender, instance, **kwargs):
+    """
+    Deletes file from filesystem
+    when corresponding `Artifact` object is deleted.
+    """
+    if instance.artifact:
+        if os.path.isfile(instance.artifact.path):
+            os.remove(instance.artifact.path)

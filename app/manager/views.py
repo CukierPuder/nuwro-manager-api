@@ -1,8 +1,9 @@
 import os
 
-from rest_framework import viewsets, mixins
+from rest_framework import status, viewsets, mixins
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from core.models import (
     Experiment,
@@ -25,7 +26,7 @@ class BaseFileAttrViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
         """Return the list of all objects ordered by name"""
-        return self.queryset.order_by('-name')
+        return self.queryset.order_by('name')
 
 
 class ExperimentViewSet(BaseFileAttrViewSet):
@@ -69,9 +70,9 @@ class ResultfileViewSet(viewsets.ModelViewSet):
             return Resultfile.objects.filter(
                 experiment__name=experiment_instance.name,
                 measurement__name=measurement_instance.name
-            )
+            ).order_by('-creation_date')
 
-        return Resultfile.objects.all()
+        return Resultfile.objects.all().order_by('-creation_date')
 
     def get_serializer_class(self):
         """Return apropriate serializer class"""
@@ -106,8 +107,8 @@ class ArtifactViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Retrieve the artifacts for the authenticated user"""
         if self.request.query_params.get('resultfile'):
-            return Artifact.objects.filter(resultfile__pk=int(self.request.query_params.get('resultfile')))
-        return Artifact.objects.all()
+            return Artifact.objects.filter(resultfile__pk=int(self.request.query_params.get('resultfile'))).order_by('filename')
+        return Artifact.objects.all().order_by('filename')
 
     def get_serializer_class(self):
         """Return the apropriate serializer class"""
