@@ -26,13 +26,14 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    os.environ['HOST_ADDR']
+    'CukierPuder.eu.pythonanywhere.com'
 ]
 
-CORS_ORIGIN_WHITELIST = [
-    f'http://{os.environ["HOST_ADDR"]}:8080'
-]
-CORS_ALLOW_CREDENTIALS = True
+#CORS_ORIGIN_WHITELIST = [
+#    f'http://{os.environ["HOST_ADDR"]}:8080'
+#]
+#CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -86,13 +87,19 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'HOST': os.environ.get('DB_HOST'),
+#        'NAME': os.environ.get('DB_NAME'),
+#        'USER': os.environ.get('DB_USER'),
+#        'PASSWORD': os.environ.get('DB_PASS'),
+#    }
+#}
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.environ.get('DB_HOST'),
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sqlite3',
     }
 }
 
